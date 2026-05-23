@@ -141,17 +141,18 @@ def extract_dynamic_thesis(comments, direction="bull"):
 
     prompt = f"""You are a financial analyst. Extract the main investment arguments from these Reddit comments.
 
-These are {direction_word} comments about a financial asset.
+    These are {direction_word} comments about a financial asset.
 
-{comments_text}
+    {comments_text}
 
-List the 2-3 main investment arguments being made. Be specific and concise.
-Respond ONLY with a JSON array of strings, no other text:
-["argument 1", "argument 2", "argument 3"]
+    List exactly 3 main investment arguments being made. Be specific and concise.
+    Respond ONLY with a JSON array of exactly 3 strings, no other text:
+    ["argument 1", "argument 2", "argument 3"]
 
-Each argument should be 5-10 words, specific to what was actually said."""
+    You MUST return exactly 3 arguments. Each argument should be 5-15 words, specific to what was actually said."""
 
     try:
+        import json
         print(f"Calling Phi-3 for {direction} thesis with {len(top_comments)} comments...")
         response = ollama.chat(
             model="phi3",
@@ -168,12 +169,17 @@ Each argument should be 5-10 words, specific to what was actually said."""
         elif "```" in content:
             content = content.split("```")[1].split("```")[0].strip()
 
-        import json
         thesis_points = json.loads(content)
 
-        # Ensure it's a list of strings
         if isinstance(thesis_points, list):
-            return [str(p) for p in thesis_points[:3]]
+            # Filter out empty or very short points
+            valid = [str(p) for p in thesis_points if len(str(p)) > 10]
+            if valid:
+                return valid[:3]
+            raise ValueError("No valid points")
+        elif isinstance(thesis_points, str):
+            # Single string returned — wrap in list
+            return [thesis_points]
         else:
             raise ValueError("Not a list")
 

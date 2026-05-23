@@ -54,12 +54,16 @@ h2 {
 
 /* ── HEADERS ── */
 h3 {
-    font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.85rem !important;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1.1rem !important;
     font-weight: 600 !important;
-    color: #FF4500 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
+    color: #e0e0e0 !important;
+    text-transform: none !important;
+    letter-spacing: 0em !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.3rem !important;
+    border-bottom: 1px solid #2a2a2a !important;
+    padding-bottom: 0.3rem !important;
 }
 
 /* ── INPUT ── */
@@ -242,7 +246,7 @@ td {
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("# 📊 ReddSenti")
+st.markdown("# ReddSenti")
 st.markdown("""
 <p style="color: #aaa; font-size: 0.95rem; line-height: 1.7; max-width: 750px; margin-bottom: 1.5rem;">
 ReddSenti is a retail narrative intelligence platform that analyses Reddit discussions across investing communities — r/investing, r/wallstreetbets, r/CryptoCurrency, r/Gold, r/AusFinance, r/IndiaInvestments and more — then compares retail sentiment against financial media coverage to surface where they diverge. Ask about US, Indian, or Australian stocks, crypto assets, ETFs, macro events, or investment decisions. Works best for specific assets and market questions — not general financial advice.
@@ -326,8 +330,8 @@ if st.button("Analyse", type="primary"):
             bull_thesis = bull_future.result()
             bear_thesis = bear_future.result()
 
-        st.divider()
         print(f"News result: {news_result}")
+        st.divider()
 
         # ── DIVERGENCE HERO BANNER ──
         if news_result and not news_result.get("is_political_fallback"):
@@ -335,24 +339,24 @@ if st.button("Analyse", type="primary"):
             divergence_hero = round(abs(avg_reddit - news_score_hero), 3)
 
             if avg_reddit > 0.35:
-                reddit_direction = "Strongly Bullish 📈📈"
+                reddit_direction = "Strongly Bullish "
             elif avg_reddit > 0.15:
-                reddit_direction = "Bullish 📈"
+                reddit_direction = "Bullish "
             elif avg_reddit > 0.05:
-                reddit_direction = "Slightly Bullish 📈"
+                reddit_direction = "Slightly Bullish "
             elif avg_reddit < -0.35:
-                reddit_direction = "Strongly Bearish 📉📉"
+                reddit_direction = "Strongly Bearish "
             elif avg_reddit < -0.15:
-                reddit_direction = "Bearish 📉"
+                reddit_direction = "Bearish "
             elif avg_reddit < -0.05:
-                reddit_direction = "Slightly Bearish 📉"
+                reddit_direction = "Slightly Bearish "
             else:
-                reddit_direction = "Neutral ➡️"
+                reddit_direction = "Neutral "
 
             news_direction = (
-                "Positive 📈" if news_result["verdict"] == "Positive"
-                else "Negative 📉" if news_result["verdict"] == "Negative"
-                else "Neutral ➡️"
+                "Positive " if news_result["verdict"] == "Positive"
+                else "Negative " if news_result["verdict"] == "Negative"
+                else "Neutral "
             )
 
             gap_direction = "Reddit more bullish than news" if avg_reddit > news_score_hero else "News more bullish than Reddit"
@@ -360,19 +364,16 @@ if st.button("Analyse", type="primary"):
             if divergence_hero > 0.2:
                 border_color = "#8b2020"
                 label_color = "#e07070"
-                icon = "⚠️"
                 label = "HIGH DIVERGENCE DETECTED"
                 description = "Reddit retail investors and financial media are seeing this very differently right now. Historically, large divergences have preceded elevated volatility."
             elif divergence_hero > 0.1:
                 border_color = "#b5830a"
                 label_color = "#ffd166"
-                icon = "📊"
                 label = "MODERATE DIVERGENCE"
                 description = "Some disagreement between retail investors and establishment coverage. Worth monitoring."
             else:
                 border_color = "#2d6a4f"
                 label_color = "#95d5b2"
-                icon = "✅"
                 label = "CONSENSUS SIGNAL"
                 description = "Reddit retail investors and financial media are broadly aligned. When retail and media agree closely, the signal tends to be more reliable."
 
@@ -385,7 +386,7 @@ if st.button("Analyse", type="primary"):
                         margin-bottom: 1rem;
                     ">
                         <div style="color: {label_color}; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; margin-bottom: 0.6rem;">
-                            {icon} {label}
+                             {label}
                         </div>
                         <div style="color: #888; font-size: 0.85rem; margin-bottom: 1rem; line-height: 1.5;">
                             {description}
@@ -397,16 +398,16 @@ if st.button("Analyse", type="primary"):
                                 <th style="text-align: left; padding: 0.4rem 0.8rem; color: #555; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; background: transparent;">Direction</th>
                             </tr>
                             <tr style="border-bottom: 1px solid #222;">
-                                <td style="padding: 0.5rem 0.8rem; color: #FF4500; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;">🔴 Reddit</td>
+                                <td style="padding: 0.5rem 0.8rem; color: #FF4500; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;"> Reddit</td>
                                 <td style="padding: 0.5rem 0.8rem; color: #e0e0e0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;">{"(" + str(round(abs(avg_reddit) * 100)) + "%)" if avg_reddit < 0 else str(round(abs(avg_reddit) * 100)) + "%"}</td>                                <td style="padding: 0.5rem 0.8rem; color: #e0e0e0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;">{reddit_direction}</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #222;">
-                                <td style="padding: 0.5rem 0.8rem; color: #888; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;">📰 News</td>
+                                <td style="padding: 0.5rem 0.8rem; color: #888; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;"> News</td>
                                 <td style="padding: 0.5rem 0.8rem; color: #e0e0e0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;">{"(" + str(round(abs(news_score_hero) * 100)) + "%)" if news_score_hero < 0 else str(round(abs(news_score_hero) * 100)) + "%"}</td>
                                 <td style="padding: 0.5rem 0.8rem; color: #e0e0e0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;">{news_direction}</td>
                             </tr>
                             <tr>
-                                <td style="padding: 0.5rem 0.8rem; color: #888; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;">⚡ Gap</td>
+                                <td style="padding: 0.5rem 0.8rem; color: #888; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;"> Gap</td>
                                 <td style="padding: 0.5rem 0.8rem; color: {label_color}; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; font-weight: 600; background: transparent;">{round(divergence_hero * 100)}%</td>
                                 <td style="padding: 0.5rem 0.8rem; color: #888; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: transparent;">{gap_direction}</td>
                             </tr>
@@ -417,7 +418,7 @@ if st.button("Analyse", type="primary"):
                     </div>
                     """, unsafe_allow_html=True)
         # ── SECTION 1 — THE VERDICT ──
-        st.header("🎯 The verdict")
+        st.markdown("### The Verdict")
         analysis = generate_analysis(query, reddit_results, news_result)
         paragraphs = analysis.split("\n\n")
         for i, para in enumerate(paragraphs):
@@ -426,39 +427,38 @@ if st.button("Analyse", type="primary"):
             else:
                 st.markdown(para)
 
-        st.divider()
 
         # ── BULL VS BEAR ──
-        st.markdown("---")
         bull_col, bear_col = st.columns(2)
 
         with bull_col:
-            st.markdown(f"**🟢 {themes['bull_count']} Redditors are bullish**")
+            st.markdown(f"**{themes['bull_count']} Redditors are bullish**")
             if bull_thesis:
                 for point in bull_thesis:
-                    st.success(f"✓ {point}")
-            else:
-                st.caption("No clear bull thesis found.")
+                    st.markdown(
+                        f"""<div style="border-left: 2px solid #2d6a4f; padding: 0.5rem 0.8rem; margin-bottom: 0.5rem; background: #0d1f17; border-radius: 4px; color: #95d5b2; font-size: 0.88rem;">✓ {point}</div>""",
+                        unsafe_allow_html=True)
             if themes["bull_comments"]:
                 for c in themes["bull_comments"][:2]:
-                    st.info(f"↑ {c['score']} upvotes — {c['body'][:150]}")
+                    st.markdown(
+                        f"""<div style="border: 1px solid #2a2a2a; padding: 0.6rem 0.8rem; margin-bottom: 0.5rem; background: #1a1a1a; border-radius: 4px; color: #888; font-size: 0.82rem;">↑ {c['score']} upvotes — {c['body'][:150]}</div>""",
+                        unsafe_allow_html=True)
 
         with bear_col:
-            st.markdown(f"**🔴 {themes['bear_count']} Redditors are bearish**")
+            st.markdown(f"**{themes['bear_count']} Redditors are bearish**")
             if bear_thesis:
                 for point in bear_thesis:
-                    st.error(f"✗ {point}")
-            else:
-                st.caption("No clear bear thesis found.")
+                    st.markdown(
+                        f"""<div style="border-left: 2px solid #8b2020; padding: 0.5rem 0.8rem; margin-bottom: 0.5rem; background: #1f0d0d; border-radius: 4px; color: #e07070; font-size: 0.88rem;">✗ {point}</div>""",
+                        unsafe_allow_html=True)
             if themes["bear_comments"]:
                 for c in themes["bear_comments"][:2]:
-                    st.warning(f"↑ {c['score']} upvotes — {c['body'][:150]}")
-
-        st.divider()
+                    st.markdown(
+                        f"""<div style="border: 1px solid #2a2a2a; padding: 0.6rem 0.8rem; margin-bottom: 0.5rem; background: #1a1a1a; border-radius: 4px; color: #888; font-size: 0.82rem;">↑ {c['score']} upvotes — {c['body'][:150]}</div>""",
+                        unsafe_allow_html=True)
 
         # ── SECTION 2 — WHAT REDDIT THINKS ──
-        st.header("🔴 What Reddit thinks")
-
+        st.markdown("### Community Sentiment")
         cols = st.columns(len(reddit_results))
         for i, (subreddit, data) in enumerate(reddit_results.items()):
             with cols[i]:
@@ -471,19 +471,17 @@ if st.button("Analyse", type="primary"):
                 )
                 st.caption(f"Based on {data['total_comments']} comments")
 
-        st.markdown("---")
         total_comments_count = sum(d["total_comments"] for d in reddit_results.values())
 
         if total_comments_count >= 100:
-            signal_strength = "✅ Strong signal"
+            signal_strength = " Strong "
             signal_caption = f"{total_comments_count} comments — high confidence"
         elif total_comments_count >= 30:
-            signal_strength = "🟡 Moderate signal"
-            signal_caption = f"{total_comments_count} comments — treat with reasonable confidence"
+            signal_strength = " Moderate "
+            signal_caption = f"{total_comments_count} comments — moderate confidence"
         else:
-            signal_strength = "⚠️ Low signal"
+            signal_strength = "⚠ Low "
             signal_caption = f"Only {total_comments_count} comments — treat with caution"
-
         stat1, stat2, stat3, stat4, stat5 = st.columns(5)
         with stat1:
             st.metric("Signal strength", signal_strength)
@@ -491,50 +489,56 @@ if st.button("Analyse", type="primary"):
         with stat2:
             st.metric("Total comments", total_comments_count)
         with stat3:
-            st.metric("🟢 Bullish", themes["bull_count"])
+            st.metric(" Bullish", themes["bull_count"])
         with stat4:
-            st.metric("🔴 Bearish", themes["bear_count"])
+            st.metric(" Bearish", themes["bear_count"])
         with stat5:
-            st.metric("⚪ Neutral", themes["neutral_count"])
-        st.markdown("---")
-
+            st.metric(" Neutral", themes["neutral_count"])
 
         # ── TEMPORAL SECTION ──
-        st.markdown("**⏱️ What Reddit is saying across time:**")
-
+        st.markdown("### Narrative Over Time")
         temporal = classify_comments_by_time(all_comments_combined, search_term)
         hist_col, pres_col, fut_col = st.columns(3)
 
         with hist_col:
             data = temporal["historical"]
-            st.markdown(f"**{data['label']}**")
-            st.caption(data["description"])
+            st.markdown(
+                f"<span style='color: #6b7280; font-weight: 600;'>{data['label']}</span> — {data['description']}",
+                unsafe_allow_html=True)
             st.caption(f"{data['count']} comments")
             if data["comments"]:
                 for c in data["comments"]:
-                    st.info(f"↑ {c['score']} — {c['body'][:150]}")
+                    st.markdown(
+                        f"""<div style="border: 1px solid #2a2a2a; border-left: 2px solid #6b7280; padding: 0.6rem 0.8rem; margin-bottom: 0.5rem; background: #1a1a1a; border-radius: 4px; color: #888; font-size: 0.82rem;">↑ {c['score']} — {c['body'][:150]}</div>""",
+                        unsafe_allow_html=True)
             else:
                 st.caption("No historical comments found.")
 
         with pres_col:
             data = temporal["present"]
-            st.markdown(f"**{data['label']}**")
-            st.caption(data["description"])
+            st.markdown(
+                f"<span style='color: #10b981; font-weight: 600;'>{data['label']}</span> — {data['description']}",
+                unsafe_allow_html=True)
             st.caption(f"{data['count']} comments")
             if data["comments"]:
                 for c in data["comments"]:
-                    st.info(f"↑ {c['score']} — {c['body'][:150]}")
+                    st.markdown(
+                        f"""<div style="border: 1px solid #2a2a2a; border-left: 2px solid #10b981; padding: 0.6rem 0.8rem; margin-bottom: 0.5rem; background: #1a1a1a; border-radius: 4px; color: #888; font-size: 0.82rem;">↑ {c['score']} — {c['body'][:150]}</div>""",
+                        unsafe_allow_html=True)
             else:
                 st.caption("No present comments found.")
 
         with fut_col:
             data = temporal["future"]
-            st.markdown(f"**{data['label']}**")
-            st.caption(data["description"])
+            st.markdown(
+                f"<span style='color: #6366f1; font-weight: 600;'>{data['label']}</span> — {data['description']}",
+                unsafe_allow_html=True)
             st.caption(f"{data['count']} comments")
             if data["comments"]:
                 for c in data["comments"]:
-                    st.info(f"↑ {c['score']} — {c['body'][:150]}")
+                    st.markdown(
+                        f"""<div style="border: 1px solid #2a2a2a; border-left: 2px solid #6366f1; padding: 0.6rem 0.8rem; margin-bottom: 0.5rem; background: #1a1a1a; border-radius: 4px; color: #888; font-size: 0.82rem;">↑ {c['score']} — {c['body'][:150]}</div>""",
+                        unsafe_allow_html=True)
             else:
                 st.caption("No forward-looking comments found.")
 
@@ -543,14 +547,14 @@ if st.button("Analyse", type="primary"):
             is_political = news_result.get("is_political_fallback", False)
 
             if is_political:
-                st.header("🌐 Political & macro context")
+                st.markdown("### Political & Macro Context")
                 st.caption(
                     "No direct financial news found for this topic. "
                     "The articles below provide broader context that may help explain "
                     "what is driving sentiment."
                 )
             else:
-                st.header("📰 What the news says")
+                st.markdown("### Media Coverage")
                 st.caption(f"Source: {news_result['source']}")
 
             st.markdown("**Recent headlines:**")
@@ -568,7 +572,7 @@ if st.button("Analyse", type="primary"):
                     st.markdown(f"{sentiment_emoji} {article['headline']}")
 
         else:
-            st.header("📰 What the news says")
+            st.header(" What the news says")
             st.info("No news found for this topic. Try a more specific query.")
 
-        st.divider()
+

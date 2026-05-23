@@ -96,20 +96,20 @@ def classify_comments_by_time(comments, search_term=""):
         "historical": {
             "comments": historical[:2],
             "count": len(historical),
-            "label": "📜 Historical — what happened before",
-            "description": "Past performance, lessons learned, what already occurred"
+            "label": " Historical ",
+            "description": "Past performance, Already occurred "
         },
         "present": {
             "comments": present[:2],
             "count": len(present),
-            "label": "📍 Present — what's happening now",
-            "description": "Current sentiment, right now positioning, today's view"
+            "label": " Present ",
+            "description": "Current sentiment, Positioning today"
         },
         "future": {
             "comments": future[:2],
             "count": len(future),
-            "label": "🔮 Future — what people expect",
-            "description": "Predictions, forecasts, expectations, price targets"
+            "label": " Future ",
+            "description": "Predictions, Forecasts, Expectations"
         }
     }
 
